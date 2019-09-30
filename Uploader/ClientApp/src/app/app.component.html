@@ -1,0 +1,43 @@
+<div>
+  <button class="button upload" (click)="inputFile.click()">
+    UPLOAD
+  </button>
+  <input name="file" id="file" (change)="upload($event)" type="file" multiple="multiple" #inputFile hidden>
+</div>
+
+
+
+<div *ngFor="let task of uploadManagerService.tasks" >
+  <div>
+    <div class="ui-helper-clearfix">
+      <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{task.name}} - {{getStatus(task.status)}} - {{ task.chunkCount - task.jobs.length}} out of {{task.chunkCount}} parts</span>
+
+
+
+    </div>
+  </div>
+  <div>
+    <i >{{task.percent()}}%</i>
+  </div>
+
+  <div>
+    <button  type="button" 
+            (click)="uploadManagerService.delete(task)"
+            *ngIf="getStatus(task.status)== 'Stop' ||getStatus(task.status)== 'Error'  ||getStatus(task.status)== 'Done'">delete</button>
+
+    <button 
+            (click)="uploadManagerService.stop(task)"
+            *ngIf="getStatus(task.status)== 'Pause'">stop</button>
+
+    <button  
+            (click)="uploadManagerService.play(task)"
+            *ngIf="getStatus(task.status)== 'Pause' ||getStatus(task.status)== 'Error' ">play</button>
+    <button 
+            (click)="uploadManagerService.pause(task)"
+            *ngIf="getStatus(task.status)== 'Play'">pause</button>
+
+    <button 
+            (click)="uploadManagerService.retry(task)"
+            *ngIf="getStatus(task.status)== 'Stop'">ReTry</button>
+  </div>
+</div>
